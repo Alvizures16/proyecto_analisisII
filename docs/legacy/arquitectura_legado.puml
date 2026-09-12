@@ -1,0 +1,73 @@
+@startuml arquitectura_legado
+!theme plain
+top to bottom direction
+
+package "Capa de Presentación\n(FarmaciasGalenoProyecto - WinForms)" {
+  [FrmLogin]
+  [FrmMenu]
+  [FrmProducto]
+  [FrmCompras]
+  [FmrInventario]
+  [FmrProveedor]
+}
+
+package "Capa de Negocio\n(CapaNegocio)" {
+  [CN_Usuario]
+  [CN_Producto]
+  [CN_Compra]
+  [CN_Inventario]
+  [CN_Proveedor]
+}
+
+package "Capa de Datos\n(CapaDatos)" {
+  [CD_Conexion]
+  [CD_Usuario]
+  [CD_Producto]
+  [CD_Compra]
+  [CD_Inventarios]
+  [CD_Proveedor]
+}
+
+package "Capa de Entidades\n(CapaEntidad)" {
+  [Usuario]
+  [Producto]
+  [Compra]
+  [Inventario]
+  [Proveedor]
+}
+
+database "SQL Server\n(FarmaciasGalenoBD)" as BD
+
+' Relaciones de Formulario a Lógica
+[FrmLogin] --> [CN_Usuario]
+[FrmProducto] --> [CN_Producto]
+[FrmCompras] --> [CN_Compra]
+[FmrInventario] --> [CN_Inventario]
+[FmrProveedor] --> [CN_Proveedor]
+[FrmMenu] ..> [FrmProducto]
+[FrmMenu] ..> [FrmCompras]
+[FrmMenu] ..> [FmrInventario]
+[FrmMenu] ..> [FmrProveedor]
+
+' Relaciones de Lógica a Datos
+[CN_Usuario] --> [CD_Usuario]
+[CN_Producto] --> [CD_Producto]
+[CN_Compra] --> [CD_Compra]
+[CN_Inventario] --> [CD_Inventarios]
+[CN_Proveedor] --> [CD_Proveedor]
+
+' Acceso a Conexión ADO.NET
+[CD_Usuario] --> [CD_Conexion]
+[CD_Producto] --> [CD_Conexion]
+[CD_Compra] --> [CD_Conexion]
+[CD_Inventarios] --> [CD_Conexion]
+[CD_Proveedor] --> [CD_Conexion]
+
+' Dependencias de Entidad
+[FarmaciasGalenoProyecto] ..> [CapaEntidad]
+[CapaNegocio] ..> [CapaEntidad]
+[CapaDatos] ..> [CapaEntidad]
+
+' Conexión física a Base de Datos
+[CD_Conexion] --> BD : "System.Data.SqlClient\n(ADO.NET / TCP 1433)"
+@enduml
